@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-cal-bg: #101010;
+  --color-cal-surface: #171717;
+  --color-cal-elevated: #1c1c1c;
+  --color-cal-border: #2a2a2a;
+  --color-cal-muted: #a1a1aa;
+  --color-cal-subtle: #71717a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-cal-bg);
+  color: #fafafa;
+  -webkit-font-smoothing: antialiased;
+}
