@@ -37,17 +37,18 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-[240px] shrink-0 flex-col border-r border-cal-border bg-cal-bg px-3 py-4">
       <div className="mb-6 flex items-center justify-between px-2">
-        <span className="text-lg font-semibold tracking-tight">Cal.com</span>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="rounded-md p-1.5 text-cal-muted transition hover:bg-cal-elevated hover:text-white"
-            aria-label="Search"
-          >
-            <Search className="h-4 w-4" />
-          </button>
-          <div className="h-7 w-7 overflow-hidden rounded-full bg-gradient-to-br from-orange-400 to-pink-500" />
-        </div>
+        <img
+          src="/cal-logo.png"
+          alt="Cal.com"
+          className="h-10 w-auto"
+        />
+        <button
+          type="button"
+          className="rounded-md p-1.5 text-cal-muted transition hover:bg-cal-elevated hover:text-white"
+          aria-label="Search"
+        >
+          <Search className="h-4 w-4" />
+        </button>
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5">
