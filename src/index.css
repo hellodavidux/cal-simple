@@ -2,12 +2,38 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --color-cal-bg: #101010;
-  --color-cal-surface: #171717;
-  --color-cal-elevated: #1c1c1c;
-  --color-cal-border: #2a2a2a;
-  --color-cal-muted: #a1a1aa;
-  --color-cal-subtle: #71717a;
+  --color-cal-bg: #0a0a0a;
+  --color-cal-surface: #141414;
+  --color-cal-elevated: #1a1a1a;
+  --color-cal-border: #262626;
+  --color-cal-muted: #a3a3a3;
+  --color-cal-subtle: #737373;
+  --color-cal-accent: #ffffff;
+
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.25s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 * {
@@ -20,4 +46,32 @@ body {
   background: var(--color-cal-bg);
   color: #fafafa;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
 }

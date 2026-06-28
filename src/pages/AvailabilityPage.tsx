@@ -3,6 +3,12 @@ import { ArrowRightLeft, Globe, MoreHorizontal, Plus, UserPlus } from "lucide-re
 import { AddRedirectModal } from "../components/AddRedirectModal";
 import { AddScheduleModal } from "../components/AddScheduleModal";
 import { TeamAvailabilityTable } from "../components/TeamAvailabilityTable";
+import { Badge } from "../components/ui/Badge";
+import { Button } from "../components/ui/Button";
+import { Card, CardBody, CardFooter, CardHeader } from "../components/ui/Card";
+import { IconButton } from "../components/ui/IconButton";
+import { PageHeader, PageShell } from "../components/ui/PageShell";
+import { SegmentedControl } from "../components/ui/SegmentedControl";
 import { timezone, workingHours } from "../data/mock";
 import { teammates } from "../data/teammates";
 import type { Redirect } from "../types/redirect";
@@ -20,26 +26,22 @@ const initialSchedules: Schedule[] = [
 
 function ScheduleCard({ schedule }: { schedule: Schedule }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-cal-border">
-      <div className="flex items-start justify-between gap-4 border-b border-cal-border px-5 py-4">
-        <div className="flex items-center gap-2">
-          <h2 className="font-medium text-white">{schedule.name}</h2>
-          {schedule.isDefault && (
-            <span className="rounded border border-cal-border bg-cal-bg px-1.5 py-0.5 text-xs text-cal-muted">
-              Default
-            </span>
-          )}
-        </div>
-        <button
-          type="button"
-          className="rounded p-1.5 text-cal-muted transition hover:bg-cal-elevated hover:text-white"
-          aria-label="More options"
-        >
-          <MoreHorizontal className="h-4 w-4" />
-        </button>
-      </div>
+    <Card>
+      <CardHeader
+        title={schedule.name}
+        badge={
+          schedule.isDefault ? (
+            <Badge variant="default">Default</Badge>
+          ) : undefined
+        }
+        action={
+          <IconButton label="More options">
+            <MoreHorizontal className="h-4 w-4" />
+          </IconButton>
+        }
+      />
 
-      <div className="px-5 py-2">
+      <CardBody>
         {schedule.timeRanges.map((row) => (
           <div
             key={row.day}
@@ -48,18 +50,16 @@ function ScheduleCard({ schedule }: { schedule: Schedule }) {
             <span className="w-10 shrink-0 text-sm font-medium text-white">
               {row.day}
             </span>
-            <span className="text-sm text-cal-muted">
-              {formatHours(row.hours)}
-            </span>
+            <span className="text-sm text-cal-muted">{formatHours(row.hours)}</span>
           </div>
         ))}
-      </div>
+      </CardBody>
 
-      <div className="flex items-center gap-2 border-t border-cal-border px-5 py-4">
+      <CardFooter>
         <Globe className="h-4 w-4 text-cal-muted" />
         <span className="text-sm text-cal-muted">{timezone}</span>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -118,62 +118,35 @@ export function AvailabilityPage() {
 
   return (
     <>
-      <div className="mx-auto max-w-5xl rounded-xl border border-cal-border bg-cal-surface p-6 md:p-8">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Availability
-            </h1>
-            <p className="mt-1 text-sm text-cal-muted">
-              Configure times when you are available for bookings.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex rounded-md border border-cal-border bg-cal-bg p-0.5">
-              <button
-                type="button"
-                onClick={() => setTab("my")}
-                className={`rounded px-3 py-1.5 text-sm font-medium transition ${
-                  tab === "my"
-                    ? "bg-cal-elevated text-white"
-                    : "text-cal-muted hover:text-white"
-                }`}
+      <PageShell>
+        <PageHeader
+          title="Availability"
+          description="Configure times when you are available for bookings."
+          actions={
+            <>
+              <SegmentedControl
+                value={tab}
+                onChange={setTab}
+                segments={[
+                  { value: "my", label: "My availability" },
+                  { value: "team", label: "Team availability" },
+                ]}
+              />
+              <Button
+                onClick={() => (tab === "my" ? setModalOpen(true) : undefined)}
+                icon={
+                  tab === "my" ? (
+                    <Plus className="h-4 w-4" />
+                  ) : (
+                    <UserPlus className="h-4 w-4" />
+                  )
+                }
               >
-                My availability
-              </button>
-              <button
-                type="button"
-                onClick={() => setTab("team")}
-                className={`rounded px-3 py-1.5 text-sm font-medium transition ${
-                  tab === "team"
-                    ? "bg-cal-elevated text-white"
-                    : "text-cal-muted hover:text-white"
-                }`}
-              >
-                Team availability
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() =>
-                tab === "my" ? setModalOpen(true) : undefined
-              }
-              className="flex h-9 items-center gap-1.5 rounded-md bg-white px-3 text-sm font-medium text-black transition hover:bg-zinc-200"
-            >
-              {tab === "my" ? (
-                <>
-                  <Plus className="h-4 w-4" />
-                  New
-                </>
-              ) : (
-                <>
-                  <UserPlus className="h-4 w-4" />
-                  Invite
-                </>
-              )}
-            </button>
-          </div>
-        </div>
+                {tab === "my" ? "New" : "Invite"}
+              </Button>
+            </>
+          }
+        />
 
         {tab === "my" ? (
           <>
@@ -207,7 +180,7 @@ export function AvailabilityPage() {
         ) : (
           <TeamAvailabilityTable />
         )}
-      </div>
+      </PageShell>
 
       <AddScheduleModal
         open={modalOpen}

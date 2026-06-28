@@ -8,8 +8,13 @@ import {
   Plus,
   Search,
 } from "lucide-react";
-import { eventTypes as initialEvents, username } from "../data/mock";
 import { Toggle } from "../components/Toggle";
+import { Badge } from "../components/ui/Badge";
+import { Button } from "../components/ui/Button";
+import { IconButton } from "../components/ui/IconButton";
+import { Input } from "../components/ui/Input";
+import { PageHeader, PageShell } from "../components/ui/PageShell";
+import { eventTypes as initialEvents, username } from "../data/mock";
 
 export function EventTypesPage() {
   const [events, setEvents] = useState(initialEvents);
@@ -28,94 +33,77 @@ export function EventTypesPage() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl rounded-xl border border-cal-border bg-cal-surface p-6 md:p-8">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Event types</h1>
-          <p className="mt-1 text-sm text-cal-muted">
-            Configure different events for people to book on your calendar.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-cal-subtle" />
-            <input
+    <PageShell>
+      <PageHeader
+        title="Event types"
+        description="Configure different events for people to book on your calendar."
+        actions={
+          <>
+            <Input
               type="search"
               placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-9 w-44 rounded-md border border-cal-border bg-cal-bg pl-9 pr-3 text-sm text-white placeholder:text-cal-subtle focus:border-zinc-500 focus:outline-none"
+              icon={<Search className="h-4 w-4" />}
+              className="w-44"
             />
-          </div>
-          <button
-            type="button"
-            className="flex h-9 items-center gap-1.5 rounded-md bg-white px-3 text-sm font-medium text-black transition hover:bg-zinc-200"
-          >
-            <Plus className="h-4 w-4" />
-            New
-          </button>
-        </div>
-      </div>
+            <Button icon={<Plus className="h-4 w-4" />}>New</Button>
+          </>
+        }
+      />
 
       <div className="overflow-hidden rounded-lg border border-cal-border">
-        {filtered.map((event, index) => (
-          <div
-            key={event.id}
-            className={`flex items-center justify-between gap-4 px-4 py-4 ${
-              index < filtered.length - 1 ? "border-b border-cal-border" : ""
-            }`}
-          >
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-baseline gap-x-2">
-                <span className="font-medium text-white">{event.title}</span>
-                <span className="text-sm text-cal-subtle">
-                  /{username}/{event.slug}
-                </span>
-              </div>
-              <div className="mt-1.5 flex items-center gap-2">
-                <span className="flex items-center gap-1 text-sm text-cal-muted">
-                  <Clock className="h-3.5 w-3.5" />
-                  {event.duration}m
-                </span>
-                {event.hidden && (
-                  <span className="inline-flex items-center gap-1 rounded bg-amber-500/15 px-1.5 py-0.5 text-xs font-medium text-amber-400">
-                    <EyeOff className="h-3 w-3" />
-                    Hidden
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex shrink-0 items-center gap-3">
-              <Toggle
-                enabled={event.enabled}
-                onChange={() => toggleEvent(event.id)}
-              />
-              <button
-                type="button"
-                className="rounded p-1.5 text-cal-muted transition hover:bg-cal-elevated hover:text-white"
-                aria-label="Open booking page"
-              >
-                <ExternalLink className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                className="rounded p-1.5 text-cal-muted transition hover:bg-cal-elevated hover:text-white"
-                aria-label="Copy link"
-              >
-                <Link2 className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                className="rounded p-1.5 text-cal-muted transition hover:bg-cal-elevated hover:text-white"
-                aria-label="More options"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-              </button>
-            </div>
+        {filtered.length === 0 ? (
+          <div className="px-4 py-12 text-center text-sm text-cal-muted">
+            No event types match your search.
           </div>
-        ))}
+        ) : (
+          filtered.map((event, index) => (
+            <div
+              key={event.id}
+              className={`group flex items-center justify-between gap-4 px-4 py-4 transition hover:bg-cal-elevated/30 ${
+                index < filtered.length - 1 ? "border-b border-cal-border" : ""
+              }`}
+            >
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="font-medium text-white">{event.title}</span>
+                  <span className="text-sm text-cal-subtle">
+                    /{username}/{event.slug}
+                  </span>
+                </div>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <span className="flex items-center gap-1 text-sm text-cal-muted">
+                    <Clock className="h-3.5 w-3.5" />
+                    {event.duration}m
+                  </span>
+                  {event.hidden && (
+                    <Badge variant="warning" icon={<EyeOff className="h-3 w-3" />}>
+                      Hidden
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-2 opacity-100 transition sm:opacity-60 sm:group-hover:opacity-100">
+                <Toggle
+                  enabled={event.enabled}
+                  onChange={() => toggleEvent(event.id)}
+                />
+                <IconButton label="Open booking page">
+                  <ExternalLink className="h-4 w-4" />
+                </IconButton>
+                <IconButton label="Copy link">
+                  <Link2 className="h-4 w-4" />
+                </IconButton>
+                <IconButton label="More options">
+                  <MoreHorizontal className="h-4 w-4" />
+                </IconButton>
+              </div>
+            </div>
+          ))
+        )}
       </div>
-    </div>
+    </PageShell>
   );
 }
