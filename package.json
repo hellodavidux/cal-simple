@@ -7,15 +7,25 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:remotion-css": "tailwindcss -i ./src/index.css -o ./src/remotion/tailwind.css",
+    "remotion:studio": "remotion studio src/remotion/index.tsx",
+    "remotion:render": "remotion render src/remotion/index.tsx AskCalDemo --output out/ask-cal-demo.mp4",
+    "remotion:render:custom": "remotion render src/remotion/index.tsx AskCalDemo --output out/ask-cal-demo.mp4 --props"
   },
   "dependencies": {
+    "@remotion/bundler": "^4.0.484",
+    "@remotion/cli": "^4.0.484",
+    "@remotion/player": "^4.0.484",
+    "@remotion/renderer": "^4.0.484",
     "lucide-react": "^1.21.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.0"
+    "react-router-dom": "^7.18.0",
+    "remotion": "^4.0.484"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.1",
     "@tailwindcss/vite": "^4.3.1",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",

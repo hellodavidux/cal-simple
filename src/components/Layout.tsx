@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { AskCalWidget } from "../features/ask-cal";
 import { Sidebar } from "./Sidebar";
 
 export function Layout() {
@@ -10,6 +11,7 @@ export function Layout() {
           <Outlet />
         </div>
       </main>
+      <AskCalWidget />
     </div>
   );
 }

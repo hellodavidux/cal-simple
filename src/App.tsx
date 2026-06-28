@@ -4,11 +4,14 @@ import { AvailabilityPage } from "./pages/AvailabilityPage";
 import { BookingsPage } from "./pages/BookingsPage";
 import { EventTypesPage } from "./pages/EventTypesPage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
+import { RemotionPreviewPage } from "./pages/RemotionPreviewPage";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Remotion composition preview — outside the app Layout on purpose */}
+        <Route path="remotion-preview" element={<RemotionPreviewPage />} />
         <Route element={<Layout />}>
           <Route index element={<EventTypesPage />} />
           <Route path="bookings" element={<BookingsPage />} />
