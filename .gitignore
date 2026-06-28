@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Remotion output + pre-compiled CSS (generate with: npm run build:remotion-css)
+out/
+src/remotion/tailwind.css
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

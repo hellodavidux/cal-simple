@@ -18,6 +18,9 @@ type AskCalPanelProps = {
   onToggleExpand: () => void;
   onSend: (message: string) => void;
   onFeedback: (messageId: string, value: MessageFeedback) => void;
+  /** Controlled composer value — passed straight to AskCalComposer for Remotion / agent mode. */
+  composerValue?: string;
+  onComposerChange?: (v: string) => void;
 };
 
 export function AskCalPanel({
@@ -31,6 +34,8 @@ export function AskCalPanel({
   onToggleExpand,
   onSend,
   onFeedback,
+  composerValue,
+  onComposerChange,
 }: AskCalPanelProps) {
   const hasMessages = messages.length > 0;
   const firstUserMessage = messages.find((message) => message.role === "user")
@@ -87,6 +92,8 @@ export function AskCalPanel({
         isThinking={isThinking}
         onSend={onSend}
         autoFocus={open && !hasMessages}
+        value={composerValue}
+        onValueChange={onComposerChange}
       />
     </div>
   );

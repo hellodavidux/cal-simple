@@ -1,4 +1,5 @@
 import {
+  type ChangeEvent,
   type FormEvent,
   type KeyboardEvent,
   useEffect,
@@ -19,6 +20,10 @@ type AskCalComposerProps = {
   isThinking: boolean;
   onSend: (message: string) => void;
   autoFocus?: boolean;
+  /** Controlled value — when provided the component is fully controlled (Remotion / agent mode). */
+  value?: string;
+  /** Required when `value` is provided. */
+  onValueChange?: (v: string) => void;
 };
 
 export function AskCalComposer({
@@ -26,9 +31,14 @@ export function AskCalComposer({
   isThinking,
   onSend,
   autoFocus = false,
+  value,
+  onValueChange,
 }: AskCalComposerProps) {
-  const [input, setInput] = useState("");
+  const [internalInput, setInternalInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const isControlled = value !== undefined;
+  const effectiveValue = isControlled ? value : internalInput;
 
   useEffect(() => {
     if (autoFocus) {
@@ -37,10 +47,10 @@ export function AskCalComposer({
   }, [autoFocus]);
 
   const submit = () => {
-    const trimmed = input.trim();
+    const trimmed = effectiveValue.trim();
     if (!trimmed || isThinking) return;
     onSend(trimmed);
-    setInput("");
+    if (!isControlled) setInternalInput("");
   };
 
   const handleSubmit = (event: FormEvent) => {
@@ -55,13 +65,21 @@ export function AskCalComposer({
     }
   };
 
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    if (isControlled) {
+      onValueChange?.(event.target.value);
+    } else {
+      setInternalInput(event.target.value);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#2a2a2a] p-3">
       <div className="rounded-lg border border-[#333] bg-[#1a1a1a]">
         <textarea
           ref={textareaRef}
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
+          value={effectiveValue}
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder={
             hasMessages
@@ -98,7 +116,7 @@ export function AskCalComposer({
             </IconButton>
             <button
               type="submit"
-              disabled={!input.trim() || isThinking}
+              disabled={!effectiveValue.trim() || isThinking}
               className="ml-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-[#3a3a3a] text-white transition hover:bg-[#4a4a4a] disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Send"
             >
